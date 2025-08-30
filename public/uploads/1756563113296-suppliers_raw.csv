@@ -1,0 +1,51 @@
+supplier_id,name,country,sector,revenue_usd_m,scope1_tco2e,scope2_tco2e,scope3_tco2e,esg_total,esg_e,esg_s,esg_g,is_iso14001,is_bcorp,is_fairtrade,has_decarb_target
+S0001,Supplier_0001,NL,Materials,8528.77,38341.06,86733.74,953388.84,42.5,50.0,51.9,23.0,False,False,False,True
+S0002,Supplier_0002,US,Consumer Staples,12494.66,130094.93,45553.09,354787.46,60.6,52.0,64.3,51.0,False,False,False,False
+S0003,Supplier_0003,FR,Consumer Discretionary,770.76,6828.36,2591.38,14168.45,59.4,63.5,63.7,80.8,False,False,False,False
+S0004,Supplier_0004,DE,Materials,3775.88,42558.67,23592.75,285508.72,63.9,69.4,57.3,66.2,False,False,False,True
+S0005,Supplier_0005,NL,Communication Services,4978.97,14254.25,15371.18,222829.24,51.2,46.5,44.8,48.4,True,False,False,False
+S0006,Supplier_0006,UK,Utilities,215.69,1644.54,1827.88,,50.8,46.2,59.4,48.9,False,False,True,False
+S0007,Supplier_0007,JP,Energy,3616.83,32796.37,34748.13,372221.0,51.3,55.9,44.7,47.7,True,False,False,True
+S0008,Supplier_0008,US,Materials,394.2,2356.34,5157.24,17786.47,49.9,49.1,33.0,35.4,True,False,False,False
+S0009,Supplier_0009,FR,Consumer Discretionary,672.87,1271.56,2529.48,15858.84,52.5,43.0,49.1,60.9,True,False,False,True
+S0010,Supplier_0010,CA,Utilities,2707.62,45602.48,7430.39,,74.2,71.8,64.0,76.0,True,False,False,True
+S0011,Supplier_0011,US,Communication Services,1885.56,37913.47,6769.93,23922.04,38.5,44.8,36.3,23.8,False,False,False,False
+S0012,Supplier_0012,FR,Real Estate,161.51,251.31,410.16,5260.05,45.2,41.1,39.1,43.8,False,False,False,False
+S0013,Supplier_0013,SE,Communication Services,8181.78,16658.44,40063.82,311710.73,66.8,61.8,54.9,57.1,False,False,False,False
+S0014,Supplier_0014,JP,Consumer Discretionary,148.18,620.99,633.24,,47.1,51.6,42.6,34.9,False,False,False,False
+S0015,Supplier_0015,BR,Utilities,3542.54,22265.62,15763.54,,68.3,72.6,83.6,70.1,False,False,False,False
+S0016,Supplier_0016,IN,Energy,93.0,1231.8,195.71,6440.35,44.3,50.7,40.3,44.2,True,True,False,True
+S0017,Supplier_0017,DE,Financials,1886.38,3874.23,6885.8,,44.5,41.1,53.6,31.2,True,False,False,False
+S0018,Supplier_0018,CN,Consumer Staples,188.09,2899.94,450.9,5978.19,46.6,44.4,49.1,48.4,True,False,False,False
+S0019,Supplier_0019,DE,Consumer Discretionary,9281.31,157386.55,24319.35,165675.76,58.8,70.8,51.5,52.2,True,False,False,False
+S0020,Supplier_0020,CN,Materials,17730.1,163220.16,300137.79,483051.13,37.4,58.7,24.5,26.4,False,False,False,False
+S0021,Supplier_0021,UK,Financials,26942.16,89380.83,98935.59,610188.6,60.2,56.5,58.9,46.5,True,False,False,True
+S0022,Supplier_0022,UK,Health Care,1036.05,1328.77,4234.42,,55.0,47.8,58.2,54.0,True,False,False,True
+S0023,Supplier_0023,CN,Utilities,43.43,261.37,266.53,7893.09,66.1,70.7,55.0,61.4,False,False,False,True
+S0024,Supplier_0024,IN,Energy,406.95,3007.31,2824.19,12619.99,57.1,60.1,53.4,39.6,False,False,False,False
+S0025,Supplier_0025,SE,Information Technology,33511.38,104629.43,52926.25,1775089.37,62.0,79.3,73.8,66.4,False,False,False,False
+S0026,Supplier_0026,CA,Materials,4591.05,25230.27,68211.01,,52.7,64.4,60.2,70.9,True,False,False,False
+S0027,Supplier_0027,JP,Materials,32777.3,256687.51,252101.03,7165610.69,55.4,43.2,48.7,58.5,False,False,False,False
+S0028,Supplier_0028,CA,Consumer Staples,29195.43,167867.82,134417.02,1449778.69,62.1,46.3,76.9,65.8,False,False,False,False
+S0029,Supplier_0029,NL,Utilities,234.14,1850.51,2176.17,,53.2,57.0,63.2,42.6,False,False,False,False
+S0030,Supplier_0030,CN,Utilities,5494.6,84386.43,11765.56,113046.59,65.1,70.6,88.4,63.1,True,False,False,True
+S0031,Supplier_0031,FR,Materials,636.78,7277.14,4151.08,,60.3,65.5,63.0,46.1,False,False,False,False
+S0032,Supplier_0032,US,Real Estate,25.09,175.43,25.8,302.42,46.5,44.7,48.5,54.7,False,False,True,True
+S0033,Supplier_0033,FR,Consumer Staples,15391.12,173361.73,65063.34,315056.42,46.9,54.4,44.0,48.8,False,False,True,True
+S0034,Supplier_0034,UK,Consumer Discretionary,6269.43,26078.51,7523.84,474301.29,44.3,40.8,52.4,61.6,False,False,False,True
+S0035,Supplier_0035,UK,Financials,84.07,86.65,319.0,,42.2,35.6,46.4,40.3,False,False,False,False
+S0036,Supplier_0036,IN,Information Technology,63.89,234.06,150.97,1971.02,53.4,56.9,72.9,74.2,True,False,False,False
+S0037,Supplier_0037,NL,Health Care,109.78,214.97,185.12,2546.46,30.1,19.0,25.5,27.2,False,False,False,False
+S0038,Supplier_0038,DE,Health Care,9477.14,22899.24,17112.1,101598.55,67.8,56.3,67.8,93.7,False,False,False,False
+S0039,Supplier_0039,CN,Consumer Discretionary,14008.93,51542.57,15273.84,152500.12,63.0,73.8,66.7,60.1,True,False,False,False
+S0040,Supplier_0040,NL,Consumer Staples,66.53,130.38,222.63,2881.51,46.4,31.3,16.7,40.9,False,False,False,False
+S0041,Supplier_0041,SE,Real Estate,102.66,388.98,810.36,2449.75,59.1,65.8,52.3,68.1,False,False,False,False
+S0042,Supplier_0042,NL,Materials,7372.19,40019.04,88072.65,65147.33,58.1,73.7,54.5,48.7,False,False,False,False
+S0043,Supplier_0043,AU,Real Estate,134.59,851.26,576.51,,45.1,47.6,43.3,42.6,False,False,False,False
+S0044,Supplier_0044,DE,Communication Services,15708.24,52696.04,53752.07,458199.08,54.0,50.9,46.4,43.6,True,False,False,True
+S0045,Supplier_0045,SE,Consumer Discretionary,283.43,743.39,1143.44,3186.3,63.9,62.3,57.3,69.4,True,False,True,False
+S0046,Supplier_0046,DE,Information Technology,838.62,1241.91,1217.74,,52.0,55.6,27.9,40.4,False,False,False,False
+S0047,Supplier_0047,JP,Consumer Staples,44316.68,76387.71,241507.81,1116785.28,58.0,76.2,41.5,45.2,False,False,False,False
+S0048,Supplier_0048,NL,Communication Services,1543.32,2298.96,5648.26,22665.87,47.4,52.8,55.0,51.8,False,False,False,False
+S0049,Supplier_0049,FR,Real Estate,10527.95,32488.32,27961.42,1064763.32,57.9,51.8,72.4,53.5,True,False,False,True
+S0050,Supplier_0050,CN,Energy,15802.62,201368.6,155860.48,,74.3,99.8,70.3,55.0,False,False,False,True
