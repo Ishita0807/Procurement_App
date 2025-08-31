@@ -1,4 +1,6 @@
 'use client';
+
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -83,6 +85,7 @@ export default function Dashboard() {
                 View Rankings
               </Button>
             </Link>
+            
           </div>
         </div>
 

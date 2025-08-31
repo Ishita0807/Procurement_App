@@ -1,5 +1,14 @@
 'use client';
-
+import {
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from '@clerk/nextjs'
+import {
+  ClerkProvider,
+} from '@clerk/nextjs'
 import React from "react";
 import { 
   Leaf, 
@@ -58,11 +67,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const currentPage = navigationItems.find(item => item.url === pathname);
 
   return (
-    <html lang="en">
-      <body>        
-        <SidebarProvider>
-          <div className="min-h-screen flex w-full bg-gradient-to-br from-slate-50 via-emerald-50/30 to-slate-100">
-            <Sidebar className="border-r border-slate-200/60 bg-white/95 backdrop-blur-sm">
+    <ClerkProvider >
+      <html lang="en">
+        <body>
+          <SidebarProvider>
+            <div className="min-h-screen flex w-full bg-gradient-to-br from-slate-50 via-emerald-50/30 to-slate-100">
+              <Sidebar className="border-r border-slate-200/60 bg-white/95 backdrop-blur-sm">
               <SidebarHeader className="border-b border-slate-200/60 p-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-sm">
@@ -99,7 +109,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                           </SidebarMenuButton>
                         </SidebarMenuItem>
                       ))}
-                    </SidebarMenu>
+                    </SidebarMenu><div ><SignedOut>
+              <SignInButton />
+              <SignUpButton>
+                <button className="bg-[#6c47ff] text-white rounded-full font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer">
+                  Sign Up
+                </button>
+              </SignUpButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn></div>
                   </SidebarGroupContent>
                 </SidebarGroup>
 
@@ -141,5 +161,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </SidebarProvider>
       </body>
     </html>
+    </ClerkProvider>
   );
 }
