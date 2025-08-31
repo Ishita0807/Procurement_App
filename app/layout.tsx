@@ -1,24 +1,16 @@
-'use client';
+'use client'
+import { SignInButton, SignUpButton, SignedIn, SignedOut } from '@clerk/nextjs'
+import { ClerkProvider } from '@clerk/nextjs'
+import React from 'react'
 import {
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from '@clerk/nextjs'
-import {
-  ClerkProvider,
-} from '@clerk/nextjs'
-import React from "react";
-import { 
-  Leaf, 
-  BarChart3, 
-  Upload, 
-  Settings, 
+  Leaf,
+  BarChart3,
+  Upload,
+  Settings,
   FileSpreadsheet,
   Award,
   TrendingUp
-} from "lucide-react";
+} from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -31,136 +23,155 @@ import {
   SidebarHeader,
   SidebarFooter,
   SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import "./globals.css";
+  SidebarTrigger
+} from '@/components/ui/sidebar'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import CustomUserMenu from '@/components/customUsercard'
+import './globals.css'
 
 const navigationItems = [
   {
-    title: "Dashboard",
+    title: 'Dashboard',
     url: '/',
-    icon: BarChart3,
+    icon: BarChart3
   },
   {
-    title: "Upload Data",
+    title: 'Upload Data',
     url: '/upload',
-    icon: Upload,
+    icon: Upload
   },
   {
-    title: "Rankings",
+    title: 'Rankings',
     url: '/rankings',
-    icon: Award,
+    icon: Award
   },
   {
-    title: "Weight Settings",
+    title: 'Weight Settings',
     url: '/settings',
-    icon: Settings,
-  },
-];
+    icon: Settings
+  }
+]
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   // find the current page based on the URL
-  const currentPage = navigationItems.find(item => item.url === pathname);
+  const currentPage = navigationItems.find((item) => item.url === pathname)
 
   return (
-    <ClerkProvider >
+    <ClerkProvider>
       <html lang="en">
         <body>
           <SidebarProvider>
-            <div className="min-h-screen flex w-full bg-gradient-to-br from-slate-50 via-emerald-50/30 to-slate-100">
+            <div className="flex min-h-screen w-full bg-gradient-to-br from-slate-50 via-emerald-50/30 to-slate-100">
               <Sidebar className="border-r border-slate-200/60 bg-white/95 backdrop-blur-sm">
-              <SidebarHeader className="border-b border-slate-200/60 p-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-sm">
-                    <Leaf className="w-6 h-6 text-white" />
+                <SidebarHeader className="border-b border-slate-200/60 p-6">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-sm">
+                      <Leaf className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-lg font-bold text-slate-900">
+                        EcoRank
+                      </h2>
+                      <p className="text-xs font-medium text-slate-500">
+                        Sustainable Supplier Selection
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h2 className="font-bold text-slate-900 text-lg">EcoRank</h2>
-                    <p className="text-xs text-slate-500 font-medium">Sustainable Supplier Selection</p>
-                  </div>
-                </div>
-              </SidebarHeader>
-              
-              <SidebarContent className="p-3">
-                <SidebarGroup>
-                  <SidebarGroupLabel className="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3 py-3">
-                    Navigation
-                  </SidebarGroupLabel>
-                  <SidebarGroupContent>
-                    <SidebarMenu className="space-y-1">
-                      {navigationItems.map((item) => (
-                        <SidebarMenuItem key={item.title}>
-                          <SidebarMenuButton 
-                            asChild 
-                            className={`hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 rounded-xl h-11 ${
-                              pathname === item.url 
-                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60 shadow-sm font-medium' 
-                                : 'text-slate-600'
-                            }`}
-                          >
-                            <Link href={item.url} className="flex items-center gap-3 px-3 py-2.5">
-                              <item.icon className="w-5 h-5" />
-                              <span className="font-medium">{item.title}</span>
-                            </Link>
-                          </SidebarMenuButton>
-                        </SidebarMenuItem>
-                      ))}
-                    </SidebarMenu><div ><SignedOut>
-              <SignInButton />
-              <SignUpButton>
-                <button className="bg-[#6c47ff] text-white rounded-full font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer">
-                  Sign Up
-                </button>
-              </SignUpButton>
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn></div>
-                  </SidebarGroupContent>
-                </SidebarGroup>
+                </SidebarHeader>
 
-                {/* Quick Insights section unchanged */}
-              </SidebarContent>
+                <SidebarContent className="p-3">
+                  <SidebarGroup>
+                    <SidebarGroupLabel className="px-3 py-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      Navigation
+                    </SidebarGroupLabel>
+                    <SidebarGroupContent>
+                      <SidebarMenu className="space-y-1">
+                        {navigationItems.map((item) => (
+                          <SidebarMenuItem key={item.title}>
+                            <SidebarMenuButton
+                              asChild
+                              className={`h-11 rounded-xl transition-all duration-200 hover:bg-emerald-50 hover:text-emerald-700 ${
+                                pathname === item.url
+                                  ? 'border border-emerald-200/60 bg-emerald-50 font-medium text-emerald-700 shadow-sm'
+                                  : 'text-slate-600'
+                              }`}
+                            >
+                              <Link
+                                href={item.url}
+                                className="flex items-center gap-3 px-3 py-2.5"
+                              >
+                                <item.icon className="h-5 w-5" />
+                                <span className="font-medium">
+                                  {item.title}
+                                </span>
+                              </Link>
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        ))}
+                        <SignedOut>
+                          <SignInButton>
+                            <button className="h-11 rounded-xl border border-emerald-200/60 font-medium text-emerald-700 shadow-sm transition-all duration-200 hover:bg-emerald-50 hover:text-emerald-700 ">
+                              Sign In
+                            </button>
+                          </SignInButton>
+                          <SignUpButton>
+                            <button className="h-11 rounded-xl border border-emerald-200/60 bg-emerald-50 font-medium text-emerald-700 shadow-sm transition-all duration-200 hover:bg-emerald-50 hover:text-emerald-700 ">
+                              Sign Up
+                            </button>
+                          </SignUpButton>
+                        </SignedOut>
+                        <SignedIn>
+                          <CustomUserMenu />
+                        </SignedIn>
+                      </SidebarMenu>
+                    </SidebarGroupContent>
+                  </SidebarGroup>
 
-              <SidebarFooter className="border-t border-slate-200/60 p-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 bg-gradient-to-br from-slate-200 to-slate-300 rounded-lg flex items-center justify-center">
-                    <span className="text-slate-600 font-semibold text-sm">PM</span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-slate-900 text-sm truncate">Procurement Manager</p>
-                    <p className="text-xs text-slate-500 truncate">Sustainable sourcing expert</p>
-                  </div>
-                </div>
-              </SidebarFooter>
-            </Sidebar>
+                  {/* Quick Insights section unchanged */}
+                </SidebarContent>
 
-            <main className="flex-1 flex flex-col min-w-0">
-              {/* Mobile Header */}
-              <header className="bg-white/80 backdrop-blur-sm border-b border-slate-200/60 px-6 py-4 md:hidden sticky top-0 z-10">
-                <div className="flex items-center gap-4">
-                  <SidebarTrigger className="hover:bg-slate-100 p-2 rounded-lg transition-colors duration-200" />
-                  <div className="flex items-center gap-2">
-                    <Leaf className="w-5 h-5 text-emerald-600" />
-                    <h1 className="text-lg font-bold text-slate-900">
-                      {currentPage?.title ?? "EcoRank"}
-                    </h1>
+                <SidebarFooter className="border-t border-slate-200/60 p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-slate-200 to-slate-300">
+                      <span className="text-sm font-semibold text-slate-600">
+                        PM
+                      </span>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold text-slate-900">
+                        Procurement Manager
+                      </p>
+                      <p className="truncate text-xs text-slate-500">
+                        Sustainable sourcing expert
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </header>
+                </SidebarFooter>
+              </Sidebar>
 
-              <div className="flex-1 overflow-auto">
-                {children}
-              </div>
-            </main>
-          </div>
-        </SidebarProvider>
-      </body>
-    </html>
+              <main className="flex min-w-0 flex-1 flex-col">
+                {/* Mobile Header */}
+                <header className="sticky top-0 z-10 border-b border-slate-200/60 bg-white/80 px-6 py-4 backdrop-blur-sm md:hidden">
+                  <div className="flex items-center gap-4">
+                    <SidebarTrigger className="rounded-lg p-2 transition-colors duration-200 hover:bg-slate-100" />
+                    <div className="flex items-center gap-2">
+                      <Leaf className="h-5 w-5 text-emerald-600" />
+                      <h1 className="text-lg font-bold text-slate-900">
+                        {currentPage?.title ?? 'EcoRank'}
+                      </h1>
+                    </div>
+                  </div>
+                </header>
+
+                <div className="flex-1 overflow-auto">{children}</div>
+              </main>
+            </div>
+          </SidebarProvider>
+        </body>
+      </html>
     </ClerkProvider>
-  );
+  )
 }
