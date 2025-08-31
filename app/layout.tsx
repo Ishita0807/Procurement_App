@@ -29,6 +29,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import CustomUserMenu from '@/components/customUsercard'
 import './globals.css'
+import { UserProvider } from '@/providers/usercontext'
 
 const navigationItems = [
   {
@@ -60,7 +61,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const currentPage = navigationItems.find((item) => item.url === pathname)
 
   return (
-    <ClerkProvider>
+    
       <html lang="en">
         <body>
           <SidebarProvider>
@@ -166,12 +167,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   </div>
                 </header>
 
-                <div className="flex-1 overflow-auto">{children}</div>
+                <div className="flex-1 overflow-auto">
+                  <UserProvider>
+                    {children}
+                  </UserProvider>
+                </div>
               </main>
             </div>
           </SidebarProvider>
         </body>
       </html>
-    </ClerkProvider>
+    
   )
 }

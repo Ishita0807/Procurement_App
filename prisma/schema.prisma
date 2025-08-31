@@ -5,6 +5,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  output="app/generated/prisma/client"
 }
 
 model User {
@@ -12,6 +13,7 @@ model User {
   email           String   @unique
   firstName       String?
   lastName        String?
+  password        String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   supplierFiles   SupplierFile[]
