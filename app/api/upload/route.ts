@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Prepare folder structure: /public/uploads/<userId>/original
-    const uploadBase = path.join(process.cwd(), "public", "uploads", user.id);
+    const uploadBase = path.join("/tmp", user.id);
     const originalDir = path.join(uploadBase, "original");
     const processedDir = path.join(uploadBase, "processed");
 
