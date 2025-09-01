@@ -6,9 +6,7 @@ This repository contains the source code for a comprehensive procurement analyti
 Sustainable_Supplier_Selection_Tool (1).pptx presentation and later prototyped in the sustainable supplier dashboard.pbix Power BI file. It is designed to overcome the limitations of standalone BI dashboards by offering enhanced scalability, user-specific data access, a custom user experience, and the potential for API-driven integrations with other enterprise systems.
 
 Live Demo & Visual Showcase
-(#)
-
-!(<path_to_image_or_gif>)
+https://procurement-app-red.vercel.app
 
 Core Features
 This application provides a suite of tools for modern, sustainable procurement management.
