@@ -22,16 +22,23 @@ import SectorBreakdown from "../../components/dashboard/SectorBreakdown";
 import RecentActivity from "../../components/dashboard/RecentActivity";
 import { Supplier } from "../../types";
 import axiosInstance from "../../utils/axiosInstance";
+import { useUser } from "@/providers/usercontext";
+import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
+  const router = useRouter ();
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string|null>(null)
-
+  const { user } = useUser();
   useEffect(() => {
     loadSuppliers();
   }, []);
-
+  useEffect(() => {
+      if(!user){
+        router.push('/login');
+      }
+    }, [user, router]);
   const loadSuppliers = async () => {
     setIsLoading(true);
     try {

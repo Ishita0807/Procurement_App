@@ -21,13 +21,13 @@ export const UserButton = () => {
 
     if (!user) return (
         <div className='w-full flex gap-2 items-center justify-center'>
-            <Button>
-                Login
-            </Button>
-
-            <Button>
-                Sign Up
-            </Button>
+            <Button onClick={()=>{
+                window.location.href = '/login'
+            }}></Button>
+        
+            <Button onClick={()=>{
+                window.location.href = '/register'
+            }}></Button>
         </div>
     );
 
@@ -41,11 +41,14 @@ export const UserButton = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="rounded-full p-0 h-10 w-10">
+                <Button variant="ghost" className="rounded-full p-0 h-10 w-10 flex items-center justify-between">
                     <Avatar className="h-10 w-10">
                         <AvatarImage src={user.imageUrl} alt={user.firstName} />
                         <AvatarFallback>{user.firstName[0] + user.lastName[0]}</AvatarFallback>
                     </Avatar>
+                    <span>
+                        {user.firstName + " " + user.lastName}
+                    </span>
                 </Button>
             </DropdownMenuTrigger>
 

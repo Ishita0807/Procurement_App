@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, use } from "react";
 import { Button } from "../../../components/ui/button";
 import { Input } from "../../../components/ui/input";
 import { Download, Search, Filter, ArrowLeft } from "lucide-react";
@@ -10,8 +10,10 @@ import RankingsFilters from "../../../components/rankings/RankingFilters";
 import RankingsStats from "../../../components/rankings/RankingStats";
 import { useRouter } from "next/navigation";
 import axiosInstance from "../../../utils/axiosInstance";
+import { useUser } from "@/providers/usercontext";
 
 export default function RankingsPage() {
+  const {user}= useUser();
   const router = useRouter();
   const [suppliers, setSuppliers] = useState<any[]>([]);
   const [filteredSuppliers, setFilteredSuppliers] = useState<any[]>([]);
@@ -97,7 +99,11 @@ export default function RankingsPage() {
   useEffect(() => {
     applyFilters();
   }, [applyFilters]); // Dependency is the memoized applyFilters function
-
+  useEffect(() => {
+    if(!user){
+      router.push('/login');
+    }
+  }, [user, router]);
   const downloadResults = () => {
     const csvHeaders = [
       "Rank", "Supplier Name", "Country", "Sector", "Sustainability Score",
