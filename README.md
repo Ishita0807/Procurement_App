@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Procurement App
+A brief description of your project. What does it do? Who is it for?
 
-## Getting Started
+Description
+A more detailed description of your project. You can talk about the problem it solves, the features it has, and the technologies you used.
 
-First, run the development server:
+Features
+Feature 1: Description of feature 1.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Feature 2: Description of feature 2.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Feature 3: Description of feature 3.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Technologies Used
+Frontend: e.g., React, Angular, Vue.js
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Backend: e.g., Node.js, Python, Java
 
-## Learn More
+Database: e.g., MongoDB, PostgreSQL, MySQL
 
-To learn more about Next.js, take a look at the following resources:
+Other: e.g., Docker, AWS, etc.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Getting Started
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Prerequisites
+What things you need to install the software and how to install them.
 
-## Deploy on Vercel
+e.g., npm install npm@latest -g
+Installation
+A step-by-step series of examples that tell you how to get a development environment running.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Clone the repo
 
+git clone https://github.com/Sneha-Bhattacharyya/Procurement_App.git
+Install NPM packages
+
+npm install
+Enter your API key in config.js
+
+const API_KEY = 'ENTER YOUR API';
+Usage
+Use this space to show useful examples of how your project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+
+Contributing
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
+
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+Don't forget to give the project a star! Thanks again!
+
+Fork the Project
+
+Create your Feature Branch (git checkout -b feature/AmazingFeature)
+
+Commit your Changes (git commit -m 'Add some AmazingFeature')
+
+Push to the Branch (git push origin feature/AmazingFeature)
+
+Open a Pull Request
+
+License
+Distributed under the MIT License. See LICENSE.txt for more information.
+
+Project Link: https://github.com/Sneha-Bhattacharyya/Procurement_App
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
