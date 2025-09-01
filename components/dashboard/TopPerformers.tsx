@@ -1,8 +1,8 @@
 import React from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
+import { Badge } from "../../components/ui/badge";
 import { Trophy, Medal, Award } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "../../components/ui/skeleton";
 
 export default function TopPerformers({ suppliers, isLoading }: { suppliers: any[]; isLoading: boolean }) {
   if (isLoading) {

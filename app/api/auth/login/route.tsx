@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import {prisma} from "@/lib/prisma"
+import {prisma} from "../../../../lib/prisma"
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 

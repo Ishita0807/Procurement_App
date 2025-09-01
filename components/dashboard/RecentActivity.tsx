@@ -1,9 +1,9 @@
 import React from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
+import { Badge } from "../../components/ui/badge";
 import { Clock, TrendingUp, FileCheck } from "lucide-react";
 import { format } from "date-fns";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "../../components/ui/skeleton";
 
 export default function RecentActivity({ suppliers, isLoading }: { suppliers: any[]; isLoading: boolean }) {
   if (isLoading) {

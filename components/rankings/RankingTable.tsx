@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Skeleton } from "../ui/skeleton";
 import { Award, Leaf, Globe, Edit2, CheckCircle } from "lucide-react";
 
 export default function RankingsTable({ suppliers, isLoading }: { suppliers: any[]; isLoading: boolean; onSupplierUpdate: (supplierId: number, updatedData: any) => void }) {
@@ -81,9 +81,9 @@ export default function RankingsTable({ suppliers, isLoading }: { suppliers: any
               </TableRow>
             </TableHeader>
             <TableBody>
-              {suppliers.map((supplier) => (
+              {suppliers.map((supplier, index) => (
                 <TableRow 
-                  key={supplier.id}
+                  key={supplier.name}
                   className="hover:bg-slate-50/50 transition-colors"
                 >
                   <TableCell>

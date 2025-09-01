@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from "@/components/ui/button";
+import { Button } from "../ui/button";
 import { FileSpreadsheet, Upload, Database } from "lucide-react";
 
 export default function FileUploadZone({ onFileSelect, dragActive, fileInputRef }: { onFileSelect: (e: React.ChangeEvent<HTMLInputElement>) => void; dragActive: boolean; fileInputRef: React.RefObject<HTMLInputElement|null> }) {

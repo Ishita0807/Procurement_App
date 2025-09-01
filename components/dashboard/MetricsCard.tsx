@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardHeader } from "@/components/ui/card";
+import { Card, CardHeader } from "../../components/ui/card";
 
 export default function MetricsCards({ title, value, icon: Icon, bgColor, textColor, bgAccent }: { title: string; value: string | number; icon: React.ComponentType<{ className?: string }>; bgColor: string; textColor: string; bgAccent: string }) {
   return (

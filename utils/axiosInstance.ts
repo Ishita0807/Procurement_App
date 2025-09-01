@@ -26,7 +26,7 @@ const publicPaths = ["/auth/login", "/auth/register"];
 
     // Refresh token if access token is expired
     if(!accessToken){
-        window.location.replace("/login");
+    return config;
     }
     if (isExpired(accessToken) && refreshToken && !isExpired(refreshToken)) {
         try {
@@ -47,7 +47,7 @@ const publicPaths = ["/auth/login", "/auth/register"];
     }
 
     if (accessToken) {
-        config.headers = config.headers || {};
+        config.headers = config.headers;
         config.headers.Authorization = `Bearer ${accessToken}`;
     }
 

@@ -3,11 +3,13 @@ export type AuthResponse = {
     refresh_token: string;
 };
 export type UserResponse = {
-    id: number;
+    id: string;
     email: string;
     firstName: string;
     lastName: string;
+    imageUrl: string;
     supplierFiles: {
+        id: string;
         originalFileUrl: string;
         processedFileUrl: string;
     }[];

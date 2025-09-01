@@ -1,7 +1,7 @@
 'use client'
 import { createContext, useContext, useEffect, useState } from 'react';
-import axios from '@/utils/axiosInstance';
-import { UserResponse } from '@/types'; // adjust path as needed
+import axios from '../utils/axiosInstance';
+import { UserResponse } from '../types'; // adjust path as needed
 
 interface UserContextType {
     user: UserResponse | null;

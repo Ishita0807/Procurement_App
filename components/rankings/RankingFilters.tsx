@@ -1,8 +1,8 @@
 import React from 'react';
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "../../components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
+import { Input } from "../../components/ui/input";
+import { Checkbox } from "../../components/ui/checkbox";
 
 export default function RankingsFilters({ filters, setFilters, suppliers }: { filters: any; setFilters: (filters: any) => void; suppliers: any[] }) {
   const sectors = [...new Set(suppliers.map(s => s.sector))].filter(Boolean);
