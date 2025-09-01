@@ -1,20 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "../../../components/ui/button";
 import { Input } from "../../..//components/ui/input";
 import { Eye, EyeOff, LogIn } from "lucide-react";
 import Link from "next/link";
 import axios from "../../..//utils/axiosInstance";
+import {useUser} from '../../../providers/usercontext';
 
 export default function LoginPage() {
+  const {user} = useUser();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if(user){
+      router.push('/');
+    }
+  }, [user, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
