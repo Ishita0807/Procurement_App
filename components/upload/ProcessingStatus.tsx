@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { Card, CardContent } from "../ui/card";
+import { Progress } from "../ui/progress";
 import { Loader2 } from "lucide-react";
 
 export default function ProcessingStatus({ progress }: { progress: number }) {

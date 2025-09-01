@@ -1,7 +1,7 @@
 import React from 'react';
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "../ui/card";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
 import { FileSpreadsheet, X, Play } from "lucide-react";
 
 export default function FileList({ files, removeFile, onProcess, processing }: { files: File[]; removeFile: (index: number) => void; onProcess: () => void; processing: boolean }) {

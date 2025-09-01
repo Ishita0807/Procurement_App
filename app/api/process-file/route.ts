@@ -1,101 +1,155 @@
-import { NextRequest, NextResponse } from 'next/server';
-import csv from 'csv-parser';
-import fs from 'fs';
-import path from 'path';
-import { Supplier } from '@/types';
-// import xlsx from 'xlsx';
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "../../../lib/prisma";
+import { parse } from "csv-parse/sync";
+import path from "path";
+import fs from "fs/promises";
+import jwt from "jsonwebtoken";
+import { Supplier } from "../../../types";
 
-export async function POST(request: NextRequest) {
+async function getUserFromRequest(req: NextRequest) {
   try {
-    const { file_url } = await request.json();
-    
-    if (!file_url) {
-      return NextResponse.json({ error: 'No file URL provided' }, { status: 400 });
-    }
+    const authHeader = req.headers.get("authorization");
+    if (!authHeader) return null;
 
-    // Convert URL to file path
-    const filename = file_url.replace('/uploads/', '');
-    const filepath = path.join(process.cwd(), 'public', 'uploads', filename);
+    const token = authHeader.replace("Bearer ", "");
+    const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
 
-    if (!fs.existsSync(filepath)) {
-      return NextResponse.json({ error: 'File not found' }, { status: 404 });
-    }
-
-    let extractedData:Supplier[] = [];
-    const fileExtension = path.extname(filename).toLowerCase();
-
-    if (fileExtension === '.csv') {
-      // Process CSV file
-      extractedData = await processCsvFile(filepath) as Supplier[];
-      
-    // } else if (['.xlsx', '.xls'].includes(fileExtension)) {
-    //   // Process Excel file
-    //   extractedData = processExcelFile(filepath);
-    } else {
-      return NextResponse.json({ error: 'Unsupported file format' }, { status: 400 });
-    }
-
-    return NextResponse.json({
-      status: 'success',
-      output: extractedData,
-      total_records: extractedData.length
-    });
-
-  } catch (error:any) {
-    console.error('Processing error:', error);
-    return NextResponse.json({
-      status: 'error',
-      details: error?.message
-    }, { status: 500 });
+    return prisma.user.findUnique({ where: { id: decoded.userId } });
+  } catch {
+    return null;
   }
 }
 
-// Helper function to process CSV files
-function processCsvFile(filepath: string) {
-  return new Promise((resolve, reject) => {
-    const results:Supplier[] = [];
-    
-    fs.createReadStream(filepath)
-      .pipe(csv())
-      .on('data', (data) => {
-        // Convert string values to appropriate types
-        const processed = processRowData(data);
-        results.push(processed);
-      })
-      .on('end', () => {
-        resolve(results);
-      })
-      .on('error', (error) => {
-        reject(error);
-      });
-  });
+export async function POST(req: NextRequest) {
+  try {
+    const user = await getUserFromRequest(req);
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    } 
+
+    const { supplierFileId } = await req.json();
+    if (!supplierFileId) {
+      return NextResponse.json(
+        { error: "Missing supplierFileId" },
+        { status: 400 }
+      );
+    }
+    console.log(supplierFileId)
+    // Find supplier file record
+    const supplierFile = await prisma.supplierFile.findUnique({
+      where: { id: supplierFileId },
+    });
+
+    if (!supplierFile) {
+      return NextResponse.json(
+        { error: "Supplier file not found" },
+        { status: 404 }
+      );
+    }
+
+    // Original file is in /public/uploads/<userId>/original/...
+    const filename = path.basename(supplierFile.originalFileUrl);
+    console.log(filename)
+    const filepath = path.join(
+      process.cwd(),
+      "public",
+      "uploads",
+      user.id,
+      "original",
+      filename
+    );
+
+    // Check file exists
+    try {
+      await fs.access(filepath);
+    } catch {
+      return NextResponse.json(
+        { error: "File not found on server" },
+        { status: 404 }
+      );
+    }
+
+    // Read file
+    const buffer = await fs.readFile(filepath);
+
+    // Process CSV
+    let processedData: Supplier[] = [];
+    if (filename.endsWith(".csv")) {
+      processedData = processCsvBuffer(buffer);
+    } else {
+      return NextResponse.json(
+        { error: "Unsupported file format" },
+        { status: 400 }
+      );
+    }
+
+    // Save processed file to /processed folder
+    const processedDir = path.join(
+      process.cwd(),
+      "public",
+      "uploads",
+      user.id,
+      "processed"
+    );
+    await fs.mkdir(processedDir, { recursive: true });
+
+    const processedFilename = `${Date.now()}-processed.json`;
+    const processedFilepath = path.join(processedDir, processedFilename);
+    const output = JSON.stringify(processedData, null, 2);
+    await fs.writeFile(
+      processedFilepath,
+      output,
+      "utf-8"
+    );
+
+    const processedUrl = `/uploads/${user.id}/processed/${processedFilename}`;
+
+    // Update DB
+    await prisma.supplierFile.update({
+      where: { id: supplierFileId },
+      data: { processedFileUrl: processedUrl },
+    });
+
+    return NextResponse.json({
+      status: "success",
+      processedFileUrl: processedUrl,
+      output: processedData,
+      recordCount: processedData.length,
+    });
+  } catch (error: any) {
+    console.error("Processing error:", error);
+    return NextResponse.json(
+      { status: "error", details: error?.message },
+      { status: 500 }
+    );
+  }
 }
 
-// Helper function to process Excel files
-// function processExcelFile(filepath:string) {
-//   const workbook = xlsx.readFile(filepath);
-//   const sheetName = workbook.SheetNames[0];
-//   const worksheet = workbook.Sheets[sheetName];
-//   const jsonData = xlsx.utils.sheet_to_json(worksheet);
-  
-//   return jsonData.map(row => processRowData(row));
-// }
+// --- Helpers ---
+function processCsvBuffer(buffer: Buffer): Supplier[] {
+  const csvText = buffer.toString("utf-8");
+  const records = parse(csvText, {
+    columns: true,
+    skip_empty_lines: true,
+  });
 
-// Helper function to process individual rows
-function processRowData(row:any) {
-  const processed:any = {};
-  
-  Object.keys(row).forEach(key => {
+  // Normalize rows
+  return records.map((row: any) => processRowData(row)) as Supplier[];
+}
+
+function processRowData(row: any) {
+  const processed: any = {};
+
+  Object.keys(row).forEach((key) => {
     const value = row[key];
-    const cleanKey = key.toLowerCase().replace(/\s+/g, '_');
-    
-    // Convert data types
-    if (typeof value === 'string') {
-      if (value.toLowerCase() === 'true' || value.toLowerCase() === 'yes') {
+    const cleanKey = key.toLowerCase().replace(/\s+/g, "_");
+
+    if (typeof value === "string") {
+      if (["true", "yes"].includes(value.toLowerCase())) {
         processed[cleanKey] = true;
-      } else if (value.toLowerCase() === 'false' || value.toLowerCase() === 'no') {
+      } else if (["false", "no"].includes(value.toLowerCase())) {
         processed[cleanKey] = false;
-      } else if (!isNaN(parseInt(value)) && value !== '') {
+      } else if (!isNaN(parseFloat(value))) {
         processed[cleanKey] = parseFloat(value);
       } else {
         processed[cleanKey] = value;
@@ -104,6 +158,6 @@ function processRowData(row:any) {
       processed[cleanKey] = value;
     }
   });
-  
+
   return processed;
 }

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardHeader, CardTitle, CardContent } from "../../components/ui/card";
+import { Badge } from "../../components/ui/badge";
 import { Trophy, Medal, Award } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "../../components/ui/skeleton";
 
 export default function TopPerformers({ suppliers, isLoading }: { suppliers: any[]; isLoading: boolean }) {
   if (isLoading) {
@@ -54,7 +54,7 @@ export default function TopPerformers({ suppliers, isLoading }: { suppliers: any
             ];
 
             return (
-              <div key={supplier.id} className="flex items-center justify-between">
+              <div key={supplier.id+supplier.name} className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className={`w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center`}>
                     <IconComponent className={`w-4 h-4 ${iconColors[index]}`} />

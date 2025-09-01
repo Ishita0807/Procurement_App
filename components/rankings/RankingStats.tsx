@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "../../components/ui/card";
 import { Filter, Users, TrendingUp } from "lucide-react";
 
 export default function RankingsStats({ totalSuppliers, filteredCount, averageScore }: { totalSuppliers: number; filteredCount: number; averageScore: number }) {

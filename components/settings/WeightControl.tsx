@@ -1,6 +1,6 @@
 import React from 'react';
-import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
+import { Label } from "../../components/ui/label";
+import { Slider } from "../../components/ui/slider";
 
 export default function WeightControl({ title, description, color, value, onChange }: { title: string; description: string; color: string; value: number; onChange: (value: number[]) => void }) {
   const colorMap: {
