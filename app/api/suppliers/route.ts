@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
     let processedFileUrl = latestFile.processedFileUrl;
     if (!processedFileUrl) {
       const filename = `${Date.now()}-suppliers.json`;
-      processedFileUrl = `/uploads/${user.id}/processed/${filename}`;
+      processedFileUrl = path.join(user.id, "processed", filename);
 
       await prisma.supplierFile.update({
         where: { id: latestFile.id },
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Resolve absolute path
-    const filepath = path.join(process.cwd(), "public", processedFileUrl);
+   const filepath = path.join("/tmp", processedFileUrl);
 
     // Ensure directory exists
     await fs.mkdir(path.dirname(filepath), { recursive: true });
@@ -93,7 +93,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json([]);
     }
 
-    const filepath = path.join(process.cwd(), "public", latestFile.processedFileUrl);
+    const filepath = path.join('tmp', latestFile.processedFileUrl);
 
     try {
       const data = await fs.readFile(filepath, "utf-8");
