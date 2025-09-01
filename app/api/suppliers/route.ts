@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import path from "path";
-import fs from "fs/promises";
 import { prisma } from "../../../lib/prisma";
 import jwt from "jsonwebtoken";
+import { createClient } from "@supabase/supabase-js";
+
+
+console.log("Supabase URL: ", process.env.NEXT_PUBLIC_SUPABASE_URL)
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 async function getUserFromRequest(req: NextRequest) {
   try {
@@ -20,7 +26,7 @@ async function getUserFromRequest(req: NextRequest) {
   }
 }
 
-// Save suppliers into the existing processed file for latest SupplierFile
+// Save suppliers into Supabase (processed file for latest SupplierFile)
 export async function POST(req: NextRequest) {
   try {
     const user = await getUserFromRequest(req);
@@ -30,7 +36,7 @@ export async function POST(req: NextRequest) {
 
     const suppliers = await req.json();
 
-    // Find the latest SupplierFile for this user
+    // Find latest SupplierFile
     const latestFile = await prisma.supplierFile.findFirst({
       where: { userId: user.id },
       orderBy: { createdAt: "desc" },
@@ -43,30 +49,41 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // If processedFileUrl exists, reuse it, otherwise create a new one
-    let processedFileUrl = latestFile.processedFileUrl;
-    if (!processedFileUrl) {
+    // If processedFileUrl exists, reuse it, otherwise create new one
+    let processedFilePath = latestFile.processedFileUrl;
+    if (!processedFilePath) {
       const filename = `${Date.now()}-suppliers.json`;
-      processedFileUrl = path.join(user.id, "processed", filename);
+      processedFilePath = `${user.id}/processed/${filename}`;
 
       await prisma.supplierFile.update({
         where: { id: latestFile.id },
-        data: { processedFileUrl },
+        data: { processedFileUrl: processedFilePath },
       });
     }
 
-    // Resolve absolute path
-   const filepath = path.join("/tmp", processedFileUrl);
+    // Upload JSON to Supabase
+    const { error: uploadError } = await supabase.storage
+      .from("supplier_files")
+      .upload(processedFilePath, JSON.stringify(suppliers, null, 2), {
+        contentType: "application/json",
+        upsert: true,
+      });
 
-    // Ensure directory exists
-    await fs.mkdir(path.dirname(filepath), { recursive: true });
+    if (uploadError) {
+      console.error("Supabase upload error:", uploadError.message);
+      return NextResponse.json(
+        { error: `Failed to save suppliers: ${uploadError.message}` },
+        { status: 500 }
+      );
+    }
 
-    // Write suppliers JSON (overwrite if file exists)
-    await fs.writeFile(filepath, JSON.stringify(suppliers, null, 2), "utf-8");
+    const { data } = supabase.storage
+      .from("supplier_files")
+      .getPublicUrl(processedFilePath);
 
     return NextResponse.json({
       message: "Suppliers saved successfully",
-      processedFileUrl,
+      processedFileUrl: data.publicUrl,
     });
   } catch (error: any) {
     return NextResponse.json(
@@ -76,7 +93,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// Load suppliers from the processed file of the latest SupplierFile
+// Load suppliers JSON from Supabase
 export async function GET(req: NextRequest) {
   try {
     const user = await getUserFromRequest(req);
@@ -93,14 +110,18 @@ export async function GET(req: NextRequest) {
       return NextResponse.json([]);
     }
 
-    const filepath = path.join('tmp', latestFile.processedFileUrl);
+    // Download JSON from Supabase
+    const { data, error } = await supabase.storage
+      .from("supplier_files")
+      .download(latestFile.processedFileUrl);
 
-    try {
-      const data = await fs.readFile(filepath, "utf-8");
-      return NextResponse.json(JSON.parse(data));
-    } catch {
+    if (error || !data) {
+      console.error("Supabase download error:", error?.message);
       return NextResponse.json([]);
     }
+
+    const text = await data.text();
+    return NextResponse.json(JSON.parse(text));
   } catch (error: any) {
     return NextResponse.json(
       { error: `Failed to load suppliers: ${error.message}` },
