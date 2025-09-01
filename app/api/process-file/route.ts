@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../lib/prisma";
 import { parse } from "csv-parse/sync";
-import path from "path";
-import fs from "fs/promises";
 import jwt from "jsonwebtoken";
+import { createClient } from "@supabase/supabase-js";
 import { Supplier } from "../../../types";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 async function getUserFromRequest(req: NextRequest) {
   try {
@@ -25,7 +29,7 @@ export async function POST(req: NextRequest) {
     const user = await getUserFromRequest(req);
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    } 
+    }
 
     const { supplierFileId } = await req.json();
     if (!supplierFileId) {
@@ -34,47 +38,38 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    console.log(supplierFileId)
-    // Find supplier file record
+
+    // Fetch supplier file record
     const supplierFile = await prisma.supplierFile.findUnique({
       where: { id: supplierFileId },
     });
 
-    if (!supplierFile) {
+    if (!supplierFile?.originalFileUrl) {
       return NextResponse.json(
         { error: "Supplier file not found" },
         { status: 404 }
       );
     }
 
-    // Original file is in /public/uploads/<userId>/original/...
-    const filename = path.basename(supplierFile.originalFileUrl);
-    console.log(filename)
-    const filepath = path.join(
-      process.cwd(),
-      "public",
-      "uploads",
-      user.id,
-      "original",
-      filename
+    // Download original file from Supabase
+    // supplierFile.originalFileUrl should be like: "userId/original/filename.csv"
+    // Remove Supabase public URL prefix if present
+    const originalPath = supplierFile.originalFileUrl.replace(
+      /^https?:\/\/[^/]+\/storage\/v1\/object\/public\/supplier_files\//,
+      ""
     );
 
-    // Check file exists
-    try {
-      await fs.access(filepath);
-    } catch {
-      return NextResponse.json(
-        { error: "File not found on server" },
-        { status: 404 }
-      );
+    const { data: fileData, error: downloadError } = await supabase.storage
+      .from("supplier_files")
+      .download(originalPath);
+    if (downloadError || !fileData) {
+      return NextResponse.json({ error: downloadError }, { status: 500 });
     }
-
-    // Read file
-    const buffer = await fs.readFile(filepath);
+    const buffer = Buffer.from(await fileData.arrayBuffer());
 
     // Process CSV
     let processedData: Supplier[] = [];
-    if (filename.endsWith(".csv")) {
+    if (supplierFile.originalFileUrl.endsWith(".csv")) {
       processedData = processCsvBuffer(buffer);
     } else {
       return NextResponse.json(
@@ -83,36 +78,39 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Save processed file to /processed folder
-    const processedDir = path.join(
-      process.cwd(),
-      "public",
-      "uploads",
-      user.id,
-      "processed"
-    );
-    await fs.mkdir(processedDir, { recursive: true });
-
+    // Upload processed JSON back to Supabase
     const processedFilename = `${Date.now()}-processed.json`;
-    const processedFilepath = path.join(processedDir, processedFilename);
-    const output = JSON.stringify(processedData, null, 2);
-    await fs.writeFile(
-      processedFilepath,
-      output,
-      "utf-8"
-    );
+    const processedPath = `${user.id}/processed/${processedFilename}`;
+    const processedContent = JSON.stringify(processedData, null, 2);
 
-    const processedUrl = `/uploads/${user.id}/processed/${processedFilename}`;
+    const { error: uploadError } = await supabase.storage
+      .from("supplier_files")
+      .upload(processedPath, processedContent, {
+        contentType: "application/json",
+        upsert: true,
+      });
 
-    // Update DB
+    if (uploadError) {
+      console.error("Supabase upload error:", uploadError.message);
+      return NextResponse.json(
+        { error: `Failed to upload processed file: ${uploadError.message}` },
+        { status: 500 }
+      );
+    }
+
+    // Update DB with processed file path
     await prisma.supplierFile.update({
       where: { id: supplierFileId },
-      data: { processedFileUrl: processedUrl },
+      data: { processedFileUrl: processedPath },
     });
+
+    const { data: urlData } = supabase.storage
+      .from("supplier_files")
+      .getPublicUrl(processedPath);
 
     return NextResponse.json({
       status: "success",
-      processedFileUrl: processedUrl,
+      processedFileUrl: urlData.publicUrl,
       output: processedData,
       recordCount: processedData.length,
     });
@@ -133,7 +131,6 @@ function processCsvBuffer(buffer: Buffer): Supplier[] {
     skip_empty_lines: true,
   });
 
-  // Normalize rows
   return records.map((row: any) => processRowData(row)) as Supplier[];
 }
 
